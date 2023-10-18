@@ -22,6 +22,7 @@ static void help()
   printk("  -h, --help            Print this help message\n");
   printk("  -p                    Disable on-demand program paging\n");
   printk("  -s                    Print cycles upon termination\n");
+  printk("  -csr                  Write 0x402 (load operations value) on mhpevent3\n");
 
   shutdown(0);
 }
@@ -42,6 +43,12 @@ static void handle_option(const char* arg)
   if (strcmp(arg, "-s") == 0) {  // print cycle count upon termination
     current.cycle0 = 1;
     return;
+  }
+
+  if (strcmp(arg,"-csr") == 0){  // write 0x402 (load operations value) on mhpevent3
+    write_csr(0x323, 0x402);
+    printk("CSR 0x323 (mhpevent3) set to 0x402 (load operations value)\n");
+
   }
 
   if (strcmp(arg, "-p") == 0) { // disable demand paging
